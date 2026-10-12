@@ -43,6 +43,10 @@ O sistema utiliza uma classe para representar os produtos e funções responsáv
 
 Os dados são mantidos durante a execução do programa.
 
+## Contexto
+
+Projeto acadêmico dos primeiros períodos da faculdade de Ciência da Computação, mantido como registro de uma etapa da minha evolução: primeira aplicação com orientação a objetos, menus de terminal, validação de entrada e separação de responsabilidades — sem dependências externas, apenas Python padrão.
+
 ## Objetivo
 
 Este projeto foi desenvolvido durante meus estudos de programação com o objetivo de colocar em prática conceitos de Python, lógica de programação e orientação a objetos.
