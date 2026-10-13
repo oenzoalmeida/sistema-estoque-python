@@ -35,6 +35,7 @@ const el = {
   modalMovimentoTitulo: $('modal-movimento-titulo'), movProduto: $('mov-produto'),
   movErro: $('mov-erro'), btnConfirmarMovimento: $('btn-confirmar-movimento'),
   modalExcluir: $('modal-excluir'), excluirTexto: $('excluir-texto'),
+  formExcluir: $('form-excluir'),
   toast: $('toast'),
 };
 
