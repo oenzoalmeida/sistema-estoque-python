@@ -19,7 +19,7 @@
 
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
 import {
-  getAuth, signInAnonymously, onAuthStateChanged,
+  getAuth, signInAnonymously,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {
   getFirestore, collection, doc, addDoc, setDoc, deleteDoc,
@@ -40,13 +40,11 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 /** Autentica anonimamente e devolve o uid (chamado uma vez no boot). */
-export function iniciarAutenticacao() {
-  return new Promise((resolve, reject) => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) resolve(user.uid);
-    });
-    signInAnonymously(auth).catch(reject);
-  });
+export async function iniciarAutenticacao() {
+  const atual = auth.currentUser;
+  if (atual) return atual.uid;
+  const cred = await signInAnonymously(auth);
+  return cred.user.uid;
 }
 
 function produtosRef(uid) {
