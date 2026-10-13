@@ -17,3 +17,13 @@ jobs:
           python-version: '3.13'
       - name: Compile Python files
         run: python -m compileall -q .
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Testes das regras de negócio
+        run: node --test tests/model.test.mjs

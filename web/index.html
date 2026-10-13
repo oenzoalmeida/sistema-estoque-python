@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Controle de Estoque — Enzo Almeida</title>
+  <meta name="description" content="Sistema web de controle de estoque: versão moderna do meu projeto acadêmico em Python.">
+  <meta name="theme-color" content="#101216">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23101216'/%3E%3Cpath d='M7 13l9-6 9 6v11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z' fill='none' stroke='%234f8cff' stroke-width='2'/%3E%3Cpath d='M13 26v-7h6v7' fill='none' stroke='%234f8cff' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="marca">
+        <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#4f8cff" opacity=".15"/><path d="M7 13l9-6 9 6v11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z" fill="none" stroke="#4f8cff" stroke-width="2"/><path d="M13 26v-7h6v7" fill="none" stroke="#4f8cff" stroke-width="2"/></svg>
+        <div>
+          <strong>Controle de Estoque</strong>
+          <small>port do projeto acadêmico em Python</small>
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary" id="btn-novo-produto">+ Novo produto</button>
+    </div>
+  </header>
+
+  <main class="container" id="app" hidden>
+    <!-- DASHBOARD -->
+    <section class="cards" aria-label="Resumo do estoque">
+      <article class="card"><span class="card-label">Produtos</span><strong class="card-num" id="kpi-total">—</strong></article>
+      <article class="card"><span class="card-label">Itens em estoque</span><strong class="card-num" id="kpi-quantidade">—</strong></article>
+      <article class="card"><span class="card-label">Valor em estoque</span><strong class="card-num" id="kpi-valor">—</strong></article>
+      <article class="card alerta" id="card-baixo"><span class="card-label">Estoque baixo</span><strong class="card-num" id="kpi-baixo">—</strong><small id="lista-baixos"></small></article>
+      <article class="card critico" id="card-zerado"><span class="card-label">Sem estoque</span><strong class="card-num" id="kpi-zerado">—</strong><small id="lista-zerados"></small></article>
+    </section>
+
+    <!-- FILTROS -->
+    <section class="barra" aria-label="Busca e filtros">
+      <input type="search" id="busca" placeholder="Buscar por nome…" aria-label="Buscar produto por nome">
+      <select id="filtro-categoria" aria-label="Filtrar por categoria">
+        <option value="">Todas as categorias</option>
+      </select>
+      <select id="filtro-situacao" aria-label="Filtrar por situação">
+        <option value="">Todas as situações</option>
+        <option value="normal">Normal</option>
+        <option value="baixo">Estoque baixo</option>
+        <option value="zerado">Sem estoque</option>
+      </select>
+    </section>
+
+    <!-- TABELA -->
+    <section class="painel">
+      <div class="tabela-wrap">
+        <table class="tabela" aria-label="Produtos">
+          <thead>
+            <tr><th>Produto</th><th>Categoria</th><th class="num">Qtd.</th><th class="num">Mín.</th><th class="num">Valor un.</th><th class="num">Valor total</th><th>Situação</th><th class="acoes-col">Ações</th></tr>
+          </thead>
+          <tbody id="corpo-tabela"></tbody>
+        </table>
+        <div class="vazio" id="tabela-vazia" hidden>
+          <p><strong>Nenhum produto encontrado.</strong></p>
+          <p id="vazio-dica">Cadastre o primeiro produto ou ajuste os filtros.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- HISTÓRICO -->
+    <section class="painel">
+      <div class="painel-head"><h2>Histórico de movimentações</h2></div>
+      <ul class="historico" id="historico"></ul>
+      <p class="vazio" id="historico-vazio">Nenhuma movimentação registrada ainda.</p>
+    </section>
+
+    <footer class="rodape">
+      <p>Versão web do <a href="https://github.com/oenzoalmeida/sistema-estoque-python" rel="noopener">Sistema de Estoque em Python</a>, projeto acadêmico de 2026. Cada visitante tem um estoque próprio de demonstração.</p>
+    </footer>
+  </main>
+
+  <!-- LOADING -->
+  <div class="loading" id="loading" role="status">
+    <span class="spin"></span> Conectando ao estoque de demonstração…
+  </div>
+
+  <!-- MODAL PRODUTO -->
+  <dialog id="modal-produto" class="modal">
+    <form method="dialog" id="form-produto" novalidate>
+      <h2 id="modal-produto-titulo">Novo produto</h2>
+      <label>Nome *
+        <input name="nome" required maxlength="120" autocomplete="off">
+      </label>
+      <label>Categoria
+        <input name="categoria" maxlength="60" list="sugestoes-categorias" autocomplete="off">
+        <datalist id="sugestoes-categorias"></datalist>
+      </label>
+      <div class="linha">
+        <label>Quantidade atual *
+          <input name="quantidade" type="number" min="0" step="1" required>
+        </label>
+        <label>Estoque mínimo
+          <input name="estoqueMinimo" type="number" min="0" step="1" value="0">
+        </label>
+        <label>Preço unitário (R$)
+          <input name="preco" type="number" min="0" step="0.01" value="0">
+        </label>
+      </div>
+      <label>Descrição (opcional)
+        <textarea name="descricao" maxlength="500" rows="2"></textarea>
+      </label>
+      <p class="form-erro" id="form-erro" role="alert" hidden></p>
+      <div class="modal-acoes">
+        <button type="button" class="btn" data-fechar>Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="btn-salvar-produto">Salvar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- MODAL MOVIMENTAÇÃO -->
+  <dialog id="modal-movimento" class="modal">
+    <form method="dialog" id="form-movimento" novalidate>
+      <h2 id="modal-movimento-titulo">Movimentação</h2>
+      <p class="mov-produto" id="mov-produto"></p>
+      <label>Quantidade *
+        <input name="quantidade" type="number" min="1" step="1" required>
+      </label>
+      <label>Motivo / observação
+        <input name="motivo" maxlength="300" placeholder="ex.: venda, compra, avaria…" autocomplete="off">
+      </label>
+      <p class="form-erro" id="mov-erro" role="alert" hidden></p>
+      <div class="modal-acoes">
+        <button type="button" class="btn" data-fechar>Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="btn-confirmar-movimento">Confirmar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- MODAL EXCLUIR -->
+  <dialog id="modal-excluir" class="modal modal-pequeno">
+    <form method="dialog" id="form-excluir">
+      <h2>Excluir produto</h2>
+      <p id="excluir-texto">Excluir este produto? O histórico de movimentações será mantido.</p>
+      <div class="modal-acoes">
+        <button type="button" class="btn" data-fechar>Cancelar</button>
+        <button type="submit" class="btn btn-danger">Excluir</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

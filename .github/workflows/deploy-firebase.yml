@@ -1,0 +1,38 @@
+name: Deploy Web (Firebase Hosting + Firestore rules)
+
+# Deploy manual. Autenticação keyless via Workload Identity Federation
+# (sem chave JSON de service account).
+# Secrets do repositório:
+#   FIREBASE_WIF_PROVIDER - projects/<num>/locations/global/workloadIdentityPools/github-pool/providers/github
+#   FIREBASE_DEPLOY_SA    - firebase-deployer@<project>.iam.gserviceaccount.com
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: google-github-actions/auth@v2
+        id: auth
+        with:
+          workload_identity_provider: ${{ secrets.FIREBASE_WIF_PROVIDER }}
+          service_account: ${{ secrets.FIREBASE_DEPLOY_SA }}
+          token_format: access_token
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Testes antes de publicar
+        run: node --test tests/model.test.mjs
+
+      - name: Deploy Hosting + Firestore rules
+        env:
+          ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+        run: npx --yes firebase-tools@latest deploy --only hosting,firestore:rules --project oenzoa-estoque --non-interactive --token ""

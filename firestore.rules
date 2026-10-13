@@ -1,0 +1,43 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Cada visitante anônimo da demo só acessa o próprio estoque.
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+
+      match /products/{productId} {
+        allow read, write: if request.auth != null && request.auth.uid == uid
+          && validaProduto();
+      }
+
+      match /movements/{movementId} {
+        allow read: if request.auth != null && request.auth.uid == uid;
+        // Movimentações são imutáveis: só cria, nunca edita nem apaga.
+        allow create: if request.auth != null && request.auth.uid == uid
+          && validaMovimento();
+        allow update, delete: if false;
+      }
+    }
+
+    function validaProduto() {
+      let d = request.resource.data;
+      return d.nome is string && d.nome.size() > 0 && d.nome.size() <= 120
+        && (!('descricao' in d) || (d.descricao is string && d.descricao.size() <= 500))
+        && d.categoria is string && d.categoria.size() <= 60
+        && d.quantidade is int && d.quantidade >= 0
+        && d.estoqueMinimo is int && d.estoqueMinimo >= 0
+        && d.preco is number && d.preco >= 0;
+    }
+
+    function validaMovimento() {
+      let d = request.resource.data;
+      return d.produtoId is string && d.produtoId.size() > 0
+        && d.produtoNome is string && d.produtoNome.size() > 0
+        && d.tipo in ['entrada', 'saida']
+        && d.quantidade is int && d.quantidade > 0
+        && (!('motivo' in d) || (d.motivo is string && d.motivo.size() <= 300));
+    }
+  }
+}
