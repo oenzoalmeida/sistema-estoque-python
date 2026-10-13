@@ -27,12 +27,12 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyD-PublicDemoConfig-Q7yT9wX2A',
+  apiKey: 'AIzaSyBYOf5-XhZ698ZOh-JuewracA30tLWSn-g',
   authDomain: 'oenzoa-estoque.firebaseapp.com',
   projectId: 'oenzoa-estoque',
-  storageBucket: 'oenzoa-estoque.appspot.com',
-  messagingSenderId: '000000000000',
-  appId: '1:000000000000:web:democonfigplaceholder',
+  storageBucket: 'oenzoa-estoque.firebasestorage.app',
+  messagingSenderId: '134723029814',
+  appId: '1:134723029814:web:0c65923463ec9f0b4d8197',
 };
 
 const app = initializeApp(firebaseConfig);
