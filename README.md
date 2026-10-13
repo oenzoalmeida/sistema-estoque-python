@@ -120,7 +120,7 @@ Cobrem cadastro e validações, entrada, saída, tentativa de estoque negativo, 
 
 ## Deploy
 
-Manual via GitHub Actions (`.github/workflows/deploy-firebase.yml`), com autenticação keyless por Workload Identity Federation — nenhuma chave de service account é armazenada. Publica o Hosting e as regras do Firestore no projeto `oenzoa-estoque`.
+Manual via GitHub Actions (`.github/workflows/deploy-firebase.yml`), com autenticação keyless por Workload Identity Federation — nenhuma chave de service account é armazenada. Publica o Hosting no projeto `oenzoa-estoque`. As regras do Firestore ficam versionadas em `firestore.rules` e são publicadas com `npx firebase-tools deploy --only firestore:rules --project oenzoa-estoque`.
 
 ## Demo
 
