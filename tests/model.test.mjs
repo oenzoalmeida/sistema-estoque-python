@@ -142,3 +142,50 @@ test('movimentações recentes limitadas a 8', () => {
 test('moeda em BRL', () => {
   assert.equal(formatarMoeda(129.9).replace('\u00a0', ' '), 'R$ 129,90');
 });
+
+// ---- tabela compartilhada com a versão Python ----
+// Os mesmos casos de tests/casos-movimentacao.json são exercitados pela suíte
+// Python (tests/test_estoque.py), sobre a classe Produto do main.py. As duas
+// implementações das mesmas regras de entrada e saída não podem divergir em
+// silêncio: um caso acrescentado ao arquivo passa a valer para os dois lados.
+
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+
+const AQUI = dirname(fileURLToPath(import.meta.url));
+const CASOS = JSON.parse(readFileSync(join(AQUI, 'casos-movimentacao.json'), 'utf8'));
+
+test('a tabela compartilhada tem casos', () => {
+  assert.ok(CASOS.movimentacoes.length > 8);
+});
+
+test('tabela compartilhada: movimentações válidas', () => {
+  for (const caso of CASOS.movimentacoes) {
+    if (caso.erro) continue;
+    const obtido = aplicarMovimentacao(caso.atual, caso.tipo, caso.quantidade);
+    assert.equal(obtido, caso.esperado, `${caso.atual} ${caso.tipo} ${caso.quantidade}`);
+  }
+});
+
+test('tabela compartilhada: quantidade inválida é recusada', () => {
+  for (const caso of CASOS.movimentacoes) {
+    if (caso.erro !== 'quantidade-invalida') continue;
+    assert.throws(
+      () => aplicarMovimentacao(caso.atual, caso.tipo, caso.quantidade),
+      QuantidadeInvalidaError,
+      `${caso.atual} ${caso.tipo} ${caso.quantidade}`
+    );
+  }
+});
+
+test('tabela compartilhada: estoque insuficiente é recusado', () => {
+  for (const caso of CASOS.movimentacoes) {
+    if (caso.erro !== 'estoque-insuficiente') continue;
+    assert.throws(
+      () => aplicarMovimentacao(caso.atual, caso.tipo, caso.quantidade),
+      EstoqueInsuficienteError,
+      `${caso.atual} ${caso.tipo} ${caso.quantidade}`
+    );
+  }
+});
