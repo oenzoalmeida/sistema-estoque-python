@@ -306,3 +306,18 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
   .spin { animation: none; }
   .btn { transition: none; }
 }
+
+/* ---- página 404 ---- */
+
+.pagina-404 { min-height: 70vh; justify-content: center; text-align: center; }
+.pagina-404 h1 { margin: 0 0 4px; }
+.pagina-404 p { color: var(--texto-2); }
+.pagina-404 .btn-primary { display: inline-block; margin-top: 8px; text-decoration: none; }
+.codigo-404 {
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1;
+  margin: 0 0 8px;
+  color: var(--azul);
+  opacity: .8;
+}
