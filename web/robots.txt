@@ -1,0 +1,7 @@
+# Demo pública de portfólio — indexação permitida.
+# Nota: robots.txt não é controle de acesso; a proteção real dos dados
+# está nas regras do Firestore (firestore.rules).
+User-agent: *
+Allow: /
+
+Sitemap: https://oenzoa-estoque.web.app/sitemap.xml
