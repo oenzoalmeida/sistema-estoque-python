@@ -1,0 +1,34 @@
+{
+  "_comentario": [
+    "Tabela de casos lida pelos dois lados do projeto: pela versão Python",
+    "(classe Produto em main.py, usada pelo app de terminal) e pela versão web",
+    "(aplicarMovimentacao em web/model.js). As duas aplicam as mesmas regras de",
+    "entrada e saída de estoque, e sem uma fonte comum de casos elas podem",
+    "divergir sem que nada acuse.",
+    "",
+    "Cada caso tem a quantidade antes da operação, o tipo e a quantidade",
+    "movimentada. 'esperado' é a quantidade depois; 'erro' marca as operações",
+    "que devem ser recusadas, e nesse caso a quantidade não pode mudar.",
+    "",
+    "Os dois lados recusam os mesmos casos, mas sinalizam de formas",
+    "diferentes: o JavaScript lança erro tipado, o Python imprime a mensagem e",
+    "devolve False. Cada suíte verifica no idioma da sua linguagem."
+  ],
+  "movimentacoes": [
+    { "atual": 10, "tipo": "entrada", "quantidade": 5, "esperado": 15 },
+    { "atual": 0, "tipo": "entrada", "quantidade": 1, "esperado": 1 },
+    { "atual": 8, "tipo": "entrada", "quantidade": 100, "esperado": 108 },
+
+    { "atual": 10, "tipo": "saida", "quantidade": 3, "esperado": 7 },
+    { "atual": 10, "tipo": "saida", "quantidade": 10, "esperado": 0 },
+    { "atual": 1, "tipo": "saida", "quantidade": 1, "esperado": 0 },
+
+    { "atual": 10, "tipo": "entrada", "quantidade": 0, "erro": "quantidade-invalida" },
+    { "atual": 10, "tipo": "entrada", "quantidade": -5, "erro": "quantidade-invalida" },
+    { "atual": 10, "tipo": "saida", "quantidade": 0, "erro": "quantidade-invalida" },
+    { "atual": 10, "tipo": "saida", "quantidade": -2, "erro": "quantidade-invalida" },
+
+    { "atual": 5, "tipo": "saida", "quantidade": 6, "erro": "estoque-insuficiente" },
+    { "atual": 0, "tipo": "saida", "quantidade": 1, "erro": "estoque-insuficiente" }
+  ]
+}
