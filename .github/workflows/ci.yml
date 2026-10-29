@@ -29,3 +29,19 @@ jobs:
           node-version: 22
       - name: Testes das regras de negócio
         run: node --test tests/*.test.mjs
+
+  rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Instalar ferramentas do emulador (efêmero, sem package.json)
+        run: npm install --no-save --legacy-peer-deps firebase@13 @firebase/rules-unit-testing@5 firebase-tools@15
+      - name: Testes das regras do Firestore (emulador descartável)
+        run: npx firebase emulators:exec --only firestore --project demo-oenzoa-estoque 'node tests/firestore-movement-emulator.test.mjs'
