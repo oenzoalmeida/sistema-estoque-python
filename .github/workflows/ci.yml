@@ -42,6 +42,6 @@ jobs:
           distribution: temurin
           java-version: '21'
       - name: Instalar ferramentas do emulador (efêmero, sem package.json)
-        run: npm install --no-save firebase@13 @firebase/rules-unit-testing@5 firebase-tools@15
+        run: npm install --no-save --legacy-peer-deps firebase@13 @firebase/rules-unit-testing@5 firebase-tools@15
       - name: Testes das regras do Firestore (emulador descartável)
         run: npx firebase emulators:exec --only firestore --project demo-oenzoa-estoque 'node tests/firestore.rules.test.mjs'
