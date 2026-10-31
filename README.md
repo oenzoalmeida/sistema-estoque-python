@@ -4,7 +4,7 @@ Sistema de gerenciamento de estoque desenvolvido em Python com foco na prática 
 
 ## Capturas de tela
 
-![Versão web: painel com resumo, filtros e lista de produtos](docs/screenshots/painel.png)
+![Visual do painel da versão web](docs/screenshots/painel.png)
 
 ## Contexto
 
