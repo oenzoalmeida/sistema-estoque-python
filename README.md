@@ -2,6 +2,10 @@
 
 Sistema de gerenciamento de estoque desenvolvido em Python com foco na prática de lógica de programação, organização de código e orientação a objetos. Desde 2026, o repositório também inclui uma versão web construída sobre as mesmas regras de negócio.
 
+## Capturas de tela
+
+![Versão web: painel com resumo, filtros e lista de produtos](docs/screenshots/painel.png)
+
 ## Contexto
 
 Este foi um dos meus primeiros projetos da faculdade de Ciência da Computação, conservado como parte da evolução do meu portfólio: um sistema de terminal completo, com orientação a objetos, validações e regras de controle de estoque, tudo na biblioteca padrão do Python. A versão web foi criada depois como exercício de evolução: mesmo domínio, mesmas regras, mas com persistência real, interface gráfica e histórico de movimentações. A versão original permanece intacta no repositório.
