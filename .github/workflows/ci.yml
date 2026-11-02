@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: 22
       - name: Testes das regras de negócio
-        run: node --test tests/*.test.mjs
+        run: node --test tests/model.test.mjs tests/movement-transaction.test.mjs tests/firestore-movement.test.mjs
 
   rules:
     runs-on: ubuntu-latest
