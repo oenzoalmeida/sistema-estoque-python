@@ -44,4 +44,4 @@ jobs:
       - name: Instalar ferramentas do emulador (efêmero, sem package.json)
         run: npm install --no-save --legacy-peer-deps firebase@13 @firebase/rules-unit-testing@5 firebase-tools@15
       - name: Testes das regras do Firestore (emulador descartável)
-        run: npx firebase emulators:exec --only firestore --project demo-oenzoa-estoque 'node tests/firestore-movement-emulator.test.mjs'
+        run: npx firebase emulators:exec --only firestore --project demo-oenzoa-estoque 'node --test tests/firestore.rules.test.mjs tests/firestore-movement-emulator.test.mjs'
