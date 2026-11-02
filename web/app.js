@@ -3,7 +3,7 @@ import {
   registrarMovimentacao, excluirProduto,
 } from './firestore.js';
 import {
-  situacaoDo, SITUACAO_ROTULO, validarProduto, aplicarMovimentacao,
+  situacaoDo, SITUACAO_ROTULO, validarProduto, aplicarMovimentacao, gerarCsvProdutos,
   descreverMovimentacao, filtrar, categoriasDe, dashboard, formatarMoeda,
   QuantidadeInvalidaError, EstoqueInsuficienteError, ValidacaoError,
 } from './model.js';
@@ -95,13 +95,13 @@ function renderTabela() {
   el.corpo.innerHTML = lista.map((p) => {
     const sit = situacaoDo(p);
     return `<tr>
-      <td class="prod">${escapeHtml(p.nome)}${p.descricao ? `<small>${escapeHtml(p.descricao)}</small>` : ''}</td>
-      <td>${escapeHtml(p.categoria || '—')}</td>
-      <td class="num"><strong>${p.quantidade}</strong></td>
-      <td class="num">${p.estoqueMinimo}</td>
-      <td class="num">${formatarMoeda(p.preco || 0)}</td>
-      <td class="num">${formatarMoeda((p.quantidade || 0) * (p.preco || 0))}</td>
-      <td><span class="situacao ${sit}">${SITUACAO_ROTULO[sit]}</span></td>
+      <td class="prod" data-label="Produto">${escapeHtml(p.nome)}${p.descricao ? `<small>${escapeHtml(p.descricao)}</small>` : ''}</td>
+      <td data-label="Categoria">${escapeHtml(p.categoria || '—')}</td>
+      <td class="num" data-label="Qtd."><strong>${p.quantidade}</strong></td>
+      <td class="num" data-label="Mín.">${p.estoqueMinimo}</td>
+      <td class="num" data-label="Valor un.">${formatarMoeda(p.preco || 0)}</td>
+      <td class="num" data-label="Valor total">${formatarMoeda((p.quantidade || 0) * (p.preco || 0))}</td>
+      <td data-label="Situação"><span class="situacao ${sit}">${SITUACAO_ROTULO[sit]}</span></td>
       <td class="acoes-col"><div class="acoes">
         <button class="btn btn-mini btn-entrada" data-mov="entrada" data-id="${p.id}" title="Registrar entrada">+ Entrada</button>
         <button class="btn btn-mini btn-saida" data-mov="saida" data-id="${p.id}" title="Registrar saída">− Saída</button>
@@ -290,6 +290,23 @@ async function confirmarExcluir(evento) {
 // ---------- eventos ----------
 
 $('btn-novo-produto').addEventListener('click', () => abrirModalProduto());
+
+// Exportação simples: CSV da lista atualmente filtrada (mesmas linhas da tela).
+$('btn-exportar').addEventListener('click', () => {
+  const lista = produtosFiltrados();
+  if (!lista.length) {
+    toast('Nada para exportar com os filtros atuais.', true);
+    return;
+  }
+  const csv = gerarCsvProdutos(lista);
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'estoque-demo.csv';
+  link.click();
+  URL.revokeObjectURL(link.href);
+  toast(`Exportados ${lista.length} produto(s) em CSV.`);
+});
 el.formProduto.addEventListener('submit', salvarProduto);
 el.formMovimento.addEventListener('submit', confirmarMovimento);
 el.formExcluir.addEventListener('submit', confirmarExcluir);
