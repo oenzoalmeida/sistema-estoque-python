@@ -32,6 +32,8 @@ Este foi um dos meus primeiros projetos da faculdade de Ciência da Computação
 - Dashboard: total de produtos, itens em estoque, valor em estoque, produtos com estoque baixo e sem estoque, movimentações recentes.
 - Busca por nome. Filtros por categoria e por situação (normal, estoque baixo, sem estoque).
 - Destaques visuais para estoque baixo e zerado.
+- No celular, a tabela de produtos vira cartões com os mesmos dados e ações.
+- Exportação simples em CSV da lista filtrada (botão “Exportar CSV”).
 
 ## Regras de negócio
 
@@ -139,7 +141,7 @@ Manual via GitHub Actions (`.github/workflows/deploy-firebase.yml`), com autenti
 
 **https://oenzoa-estoque.web.app**
 
-Abertura direta, sem login. Cada navegador recebe um estoque de demonstração isolado.
+Abertura direta, sem login. Cada navegador recebe um estoque de demonstração isolado. O acesso é anônimo: o estoque fica vinculado à sessão do navegador, então limpar os dados do navegador ou trocar de dispositivo cria um estoque novo e o anterior pode ficar inacessível — a demo não serve para dados reais.
 
 ## Autor
 
