@@ -156,7 +156,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 .situacao.zerado { background: rgba(255, 107, 107, .14); color: var(--vermelho); }
 
 .acoes-col { text-align: right; }
-.acoes { display: flex; gap: 6px; justify-content: flex-end; }
+.acoes { display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; }
 
 .vazio { padding: 28px 20px; text-align: center; color: var(--texto-2); }
 .vazio p { margin: 4px 0; }
@@ -300,6 +300,30 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
   .container { padding: 14px; }
   .linha { grid-template-columns: 1fr; }
   .card-num { font-size: 1.25rem; }
+
+  /* A tabela de produtos vira cartões: mesmos dados e mesmas ações, uma
+     linha por produto, com o rótulo de cada coluna antes do valor. */
+  .tabela-wrap { overflow-x: visible; }
+  .tabela { min-width: 0; }
+  .tabela thead { display: none; }
+  .tabela, .tabela tbody, .tabela tr, .tabela td { display: block; width: 100%; }
+  .tabela tr {
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding: 10px 12px;
+  }
+  .tabela td { border: 0; padding: 3px 0; text-align: left; }
+  .tabela td.num { text-align: left; }
+  .tabela td[data-label]::before {
+    content: attr(data-label) ': ';
+    font-weight: 600;
+    color: var(--texto-2);
+    font-size: .78rem;
+  }
+  .tabela td.prod::before { display: block; margin-bottom: 2px; }
+  .tabela td.acoes-col { padding-top: 8px; }
+  .tabela td.acoes-col .acoes { flex-wrap: wrap; justify-content: flex-start; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -321,3 +345,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
   color: var(--azul);
   opacity: .8;
 }
+
+/* [hidden] precisa vencer o display:flex do próprio .loading, senão o
+   indicador de carregamento continua visível após o app abrir. */
+.loading[hidden] { display: none; }
