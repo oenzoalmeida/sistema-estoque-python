@@ -28,4 +28,4 @@ jobs:
         with:
           node-version: 22
       - name: Testes das regras de negócio
-        run: node --test tests/model.test.mjs
+        run: node --test tests/*.test.mjs

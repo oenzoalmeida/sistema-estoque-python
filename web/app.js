@@ -3,7 +3,7 @@ import {
   registrarMovimentacao, excluirProduto,
 } from './firestore.js';
 import {
-  situacaoDo, SITUACAO_ROTULO, validarProduto, aplicarMovimentacao,
+  situacaoDo, SITUACAO_ROTULO, validarProduto,
   descreverMovimentacao, filtrar, categoriasDe, dashboard, formatarMoeda,
   QuantidadeInvalidaError, EstoqueInsuficienteError, ValidacaoError,
 } from './model.js';
@@ -241,14 +241,8 @@ async function confirmarMovimento(evento) {
   const quantidade = Number(el.formMovimento.quantidade.value);
   const motivo = el.formMovimento.motivo.value;
   try {
-    const novaQuantidade = aplicarMovimentacao(produto.quantidade, tipo, quantidade);
-    // revalida com o valor mais recente do snapshot para evitar corrida
-    const atual = estado.produtos.find((p) => p.id === produto.id);
-    if (atual && atual.quantidade !== produto.quantidade) {
-      aplicarMovimentacao(atual.quantidade, tipo, quantidade);
-      produto.quantidade = atual.quantidade;
-    }
-    await registrarMovimentacao(estado.uid, produto, tipo, quantidade, motivo, novaQuantidade);
+    // Não decidir pelo snapshot da UI: a transação valida o saldo atual.
+    await registrarMovimentacao(estado.uid, produto, tipo, quantidade, motivo);
     el.modalMovimento.close();
     toast(descreverMovimentacao({ tipo, produtoNome: produto.nome, quantidade, motivo }));
   } catch (e) {
