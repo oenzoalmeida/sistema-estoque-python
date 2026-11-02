@@ -37,4 +37,4 @@ jobs:
       - name: Deploy Hosting + Firestore rules
         env:
           ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
-        run: npx --yes firebase-tools@latest deploy --only hosting --project oenzoa-estoque --non-interactive --token ""
+        run: npx --yes firebase-tools@latest deploy --only hosting --project oenzoa-estoque --non-interactive --token "$ACCESS_TOKEN"
