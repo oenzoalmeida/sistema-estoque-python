@@ -189,3 +189,27 @@ test('tabela compartilhada: estoque insuficiente é recusado', () => {
     );
   }
 });
+
+// ---- exportação CSV simples ----
+import { gerarCsvProdutos } from '../web/model.js';
+
+test('CSV tem cabeçalho, uma linha por produto e situação calculada', () => {
+  const csv = gerarCsvProdutos([
+    p({ nome: 'Mouse Logitech', quantidade: 10, estoqueMinimo: 5, preco: 129.9 }),
+    p({ nome: 'Teclado', quantidade: 0, estoqueMinimo: 2, preco: 0 }),
+  ]);
+  const linhas = csv.trim().split('\n');
+  assert.equal(linhas[0], 'produto;categoria;quantidade;estoque_minimo;preco_unitario;valor_total;situacao');
+  assert.equal(linhas.length, 3);
+  assert.equal(linhas[1], 'Mouse Logitech;Periféricos;10;5;129,90;1299,00;Normal');
+  assert.equal(linhas[2], 'Teclado;Periféricos;0;2;0,00;0,00;Sem estoque');
+});
+
+test('CSV escapa ponto e vírgula, aspas e quebra de linha nos campos', () => {
+  const csv = gerarCsvProdutos([p({ nome: 'Cabo "Y"; 2m\nnovo', categoria: 'Áudio; Vídeo' })]);
+  assert.ok(csv.includes('"Cabo ""Y""; 2m\nnovo";"Áudio; Vídeo";'));
+});
+
+test('CSV de lista vazia é só o cabeçalho', () => {
+  assert.equal(gerarCsvProdutos([]), 'produto;categoria;quantidade;estoque_minimo;preco_unitario;valor_total;situacao\n');
+});

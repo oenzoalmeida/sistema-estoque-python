@@ -116,6 +116,38 @@ export function dashboard(produtos, movimentacoes = []) {
 }
 
 /** Formata preço em BRL. */
+/** Formata número para CSV pt-BR (vírgula decimal, sem símbolo de moeda). */
+function numeroCsv(valor) {
+  return Number(valor || 0).toFixed(2).replace('.', ',');
+}
+
+/** Escapa um campo de CSV separado por ponto e vírgula. */
+function csvCampo(valor) {
+  const texto = String(valor ?? '');
+  return /[;"\n]/.test(texto) ? '"' + texto.replace(/"/g, '""') + '"' : texto;
+}
+
+/**
+ * CSV simples dos produtos (exportação da demo): uma linha por produto com
+ * situação calculada pelas mesmas regras da tela. Separador ';' e decimais
+ * com vírgula, como se lê em pt-BR.
+ */
+export function gerarCsvProdutos(produtos) {
+  const linhas = ['produto;categoria;quantidade;estoque_minimo;preco_unitario;valor_total;situacao'];
+  for (const p of produtos) {
+    linhas.push([
+      csvCampo(p.nome),
+      csvCampo(p.categoria || ''),
+      p.quantidade ?? 0,
+      p.estoqueMinimo ?? 0,
+      numeroCsv(p.preco),
+      numeroCsv((p.quantidade || 0) * (p.preco || 0)),
+      SITUACAO_ROTULO[situacaoDo(p)],
+    ].join(';'));
+  }
+  return linhas.join('\n') + '\n';
+}
+
 export function formatarMoeda(valor) {
   return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }

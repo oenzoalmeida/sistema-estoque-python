@@ -2,6 +2,10 @@
 
 Sistema de gerenciamento de estoque desenvolvido em Python com foco na prática de lógica de programação, organização de código e orientação a objetos. Desde 2026, o repositório também inclui uma versão web construída sobre as mesmas regras de negócio.
 
+## Capturas de tela
+
+![Visual do painel da versão web](docs/screenshots/painel.png)
+
 ## Contexto
 
 Este foi um dos meus primeiros projetos da faculdade de Ciência da Computação, conservado como parte da evolução do meu portfólio: um sistema de terminal completo, com orientação a objetos, validações e regras de controle de estoque, tudo na biblioteca padrão do Python. A versão web foi criada depois como exercício de evolução: mesmo domínio, mesmas regras, mas com persistência real, interface gráfica e histórico de movimentações. A versão original permanece intacta no repositório.
@@ -28,6 +32,8 @@ Este foi um dos meus primeiros projetos da faculdade de Ciência da Computação
 - Dashboard: total de produtos, itens em estoque, valor em estoque, produtos com estoque baixo e sem estoque, movimentações recentes.
 - Busca por nome. Filtros por categoria e por situação (normal, estoque baixo, sem estoque).
 - Destaques visuais para estoque baixo e zerado.
+- No celular, a tabela de produtos vira cartões com os mesmos dados e ações.
+- Exportação simples em CSV da lista filtrada (botão “Exportar CSV”).
 
 ## Regras de negócio
 
@@ -135,7 +141,7 @@ Manual via GitHub Actions (`.github/workflows/deploy-firebase.yml`), com autenti
 
 **https://oenzoa-estoque.web.app**
 
-Abertura direta, sem login. Cada navegador recebe um estoque de demonstração isolado.
+Abertura direta, sem login. Cada navegador recebe um estoque de demonstração isolado. O acesso é anônimo: o estoque fica vinculado à sessão do navegador, então limpar os dados do navegador ou trocar de dispositivo cria um estoque novo e o anterior pode ficar inacessível — a demo não serve para dados reais.
 
 ## Autor
 

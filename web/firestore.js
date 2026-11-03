@@ -23,8 +23,10 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {
   getFirestore, collection, doc, addDoc, setDoc, deleteDoc,
-  getDocs, onSnapshot, query, orderBy, serverTimestamp, writeBatch,
+  getDocs, onSnapshot, query, orderBy, serverTimestamp, runTransaction,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+
+import { movimentarEmTransacao } from './movement-transaction.js';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBYOf5-XhZ698ZOh-JuewracA30tLWSn-g',
@@ -81,23 +83,14 @@ export async function atualizarProduto(uid, id, dados) {
   return setDoc(doc(db, 'users', uid, 'products', id), { ...dados, atualizadoEm: serverTimestamp() }, { merge: true });
 }
 
-/**
- * Registra movimentação e atualiza o produto na mesma transação em lote.
- * A validação de estoque suficiente é feita antes pela UI (motor puro) e
- * revalidada com o valor atual do snapshot para evitar corridas.
- */
-export async function registrarMovimentacao(uid, produto, tipo, quantidade, motivo, novaQuantidade) {
-  const batch = writeBatch(db);
-  batch.set(doc(db, 'users', uid, 'products', produto.id), { quantidade: novaQuantidade, atualizadoEm: serverTimestamp() }, { merge: true });
-  batch.set(doc(movimentosRef(uid)), {
-    produtoId: produto.id,
-    produtoNome: produto.nome,
-    tipo,
-    quantidade,
-    motivo: motivo?.trim() || '',
-    criadoEm: serverTimestamp(),
-  });
-  return batch.commit();
+/** Lê o saldo no servidor e grava produto/histórico atomicamente, com retry do SDK. */
+export async function registrarMovimentacao(uid, produto, tipo, quantidade, motivo) {
+  const produtoRef = doc(db, 'users', uid, 'products', produto.id);
+  // Gerar a referência fora do callback evita IDs diferentes em cada retry.
+  const movimentoRef = doc(movimentosRef(uid));
+  return runTransaction(db, (transaction) => movimentarEmTransacao(
+    transaction, produtoRef, movimentoRef, { tipo, quantidade, motivo }, serverTimestamp,
+  ));
 }
 
 /** Exclui o produto. O histórico permanece (produtoNome denormalizado). */
