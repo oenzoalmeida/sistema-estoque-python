@@ -1,3 +1,5 @@
+import math
+
 class Produto:
     def __init__(self, nome, categoria, quantidade, preco):
         self.nome = nome
@@ -75,8 +77,8 @@ def cadastrar_produto():
         print("Quantidade ou preço inválido.")
         return
 
-    if quantidade < 0 or preco < 0:
-        print("Quantidade e preço não podem ser negativos.")
+    if quantidade < 0 or preco < 0 or not math.isfinite(preco):
+        print("Informe quantidade e preço válidos (não negativos e finitos).")
         return
 
     novo_produto = Produto(nome, categoria, quantidade, preco)

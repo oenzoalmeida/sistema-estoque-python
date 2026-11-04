@@ -14,11 +14,12 @@ import json
 import sys
 import unittest
 from contextlib import redirect_stdout
+from unittest.mock import patch
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from main import Produto, buscar_produto, produtos  # noqa: E402
+from main import Produto, buscar_produto, cadastrar_produto, produtos  # noqa: E402
 
 CASOS = json.loads(
     (Path(__file__).resolve().parent / 'casos-movimentacao.json').read_text('utf-8')
@@ -153,6 +154,32 @@ class CatalogoInicialTests(unittest.TestCase):
             with self.subTest(produto=produto.nome):
                 self.assertGreaterEqual(produto.quantidade, 0)
                 self.assertGreater(produto.preco, 0)
+
+
+
+class CadastroValoresInvalidosTests(unittest.TestCase):
+    def test_preco_nao_finito_e_rejeitado_sem_criar_produto(self):
+        for texto in ('nan', 'inf', '-inf', '1e309'):
+            with self.subTest(preco=texto):
+                antes = len(produtos)
+                with patch('builtins.input', side_effect=[
+                    'Produto de teste inexistente', 'Teste', '2', texto,
+                ]), redirect_stdout(io.StringIO()) as saida:
+                    cadastrar_produto()
+                self.assertEqual(len(produtos), antes)
+                self.assertIn('preço válidos', saida.getvalue())
+
+    def test_preco_decimal_legitimo_continua_aceito(self):
+        antes = len(produtos)
+        with patch('builtins.input', side_effect=[
+            'Produto de preço decimal', 'Teste', '2', '14,50',
+        ]), redirect_stdout(io.StringIO()):
+            cadastrar_produto()
+        try:
+            self.assertEqual(len(produtos), antes + 1)
+            self.assertAlmostEqual(produtos[-1].preco, 14.5)
+        finally:
+            del produtos[antes:]
 
 
 if __name__ == '__main__':
