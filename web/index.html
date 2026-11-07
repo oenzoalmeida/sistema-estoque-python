@@ -98,8 +98,25 @@
   </main>
 
   <!-- LOADING -->
-  <div class="loading" id="loading" role="status">
-    <span class="spin"></span> Conectando ao estoque de demonstração…
+  <div class="loading" id="loading" role="status" aria-label="Conectando ao estoque de demonstração…">
+    <div class="container skeleton-app" aria-hidden="true">
+      <section class="cards">
+        <article class="card"><span class="skeleton" style="width:64px;height:12px"></span><span class="skeleton" style="width:40px;height:24px"></span></article>
+        <article class="card"><span class="skeleton" style="width:88px;height:12px"></span><span class="skeleton" style="width:40px;height:24px"></span></article>
+        <article class="card"><span class="skeleton" style="width:76px;height:12px"></span><span class="skeleton" style="width:56px;height:24px"></span></article>
+        <article class="card"><span class="skeleton" style="width:68px;height:12px"></span><span class="skeleton" style="width:24px;height:24px"></span></article>
+        <article class="card"><span class="skeleton" style="width:60px;height:12px"></span><span class="skeleton" style="width:24px;height:24px"></span></article>
+      </section>
+      <section class="painel">
+        <div class="painel-head"><span class="skeleton" style="width:90px;height:20px"></span></div>
+        <div class="skeleton-linhas">
+          <span class="skeleton" style="width:100%;height:14px"></span>
+          <span class="skeleton" style="width:100%;height:14px"></span>
+          <span class="skeleton" style="width:100%;height:14px"></span>
+          <span class="skeleton" style="width:70%;height:14px"></span>
+        </div>
+      </section>
+    </div>
   </div>
 
   <!-- MODAL PRODUTO -->
