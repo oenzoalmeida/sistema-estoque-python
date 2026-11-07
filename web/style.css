@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600;700&display=swap');
 /* Sistema de Estoque web — port da versão acadêmica em Python (CLI). */
 
 :root {
@@ -432,3 +433,156 @@ a:focus-visible {
 
   .btn:active { transform: none; }
 }
+
+/* ==========================================================================
+   REDESIGN "DEPÓSITO" - direção visual escolhida
+   Kraft claro + amarelo industrial, Barlow Condensed nos títulos,
+   IBM Plex Mono nos números. Apenas CSS: nenhuma lógica alterada.
+   ========================================================================== */
+:root {
+  --fundo: #F2EDE3;
+  --superficie: #FBF8F1;
+  --superficie-2: #EFE9DC;
+  --borda: #2B2419;
+  --texto: #211C14;
+  --texto-2: #6E6350;
+  --azul: #8a6700;
+  --azul-forte: #6d5200;
+  --verde: #2F7D4F;
+  --amarelo: #B8860B;
+  --vermelho: #C43D2B;
+  --raio: 6px;
+}
+
+body {
+  font-family: 'Barlow', system-ui, sans-serif;
+  background:
+    repeating-linear-gradient(-45deg, transparent 0 26px, rgba(43,36,25,.028) 26px 27px),
+    var(--fundo);
+}
+
+.topbar {
+  background: #211C14;
+  border-bottom: 4px solid #F5C518;
+}
+.topbar .marca strong {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.45rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #F5C518;
+}
+.topbar .marca small { color: #B9AE97; }
+.topbar .btn {
+  background: transparent;
+  color: #EDE4CF;
+  border: 2px solid #57503E;
+}
+.topbar .btn:hover { border-color: #F5C518; color: #F5C518; }
+
+h1, h2, h3, .painel-head h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  color: var(--texto);
+}
+.painel-head h2 { font-size: 1.5rem; font-weight: 700; }
+.painel-head h2::after {
+  content: "";
+  display: block;
+  width: 56px; height: 5px; margin-top: 6px;
+  background: repeating-linear-gradient(90deg, #F5C518 0 8px, #211C14 8px 12px);
+}
+.painel {
+  background: var(--superficie);
+  border: 2px solid var(--borda);
+  border-radius: var(--raio);
+  box-shadow: 5px 5px 0 rgba(33,28,20,.14);
+}
+
+.card {
+  background: var(--superficie);
+  border: 2px solid var(--borda);
+  border-radius: var(--raio);
+  box-shadow: 4px 4px 0 rgba(33,28,20,.12);
+}
+.card-label {
+  font-family: 'IBM Plex Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-size: .72rem;
+  color: var(--texto-2);
+}
+.card-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  color: var(--texto);
+}
+.card.alerta { border-color: var(--amarelo); }
+.card.critico { border-color: var(--vermelho); }
+
+.btn {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-size: .95rem;
+  border: 2px solid var(--borda);
+  border-radius: var(--raio);
+  background: var(--superficie);
+  color: var(--texto);
+}
+.btn-primary {
+  background: #F5C518;
+  color: #211C14;
+  box-shadow: 3px 3px 0 rgba(33,28,20,.35);
+}
+.btn-primary:hover { background: #ffd83d; }
+.btn-danger {
+  background: transparent;
+  color: var(--vermelho);
+  border-color: var(--vermelho);
+}
+.btn-danger:hover { background: #f9e5e1; }
+
+input, select, textarea {
+  background: var(--superficie) !important;
+  border: 2px solid var(--borda) !important;
+  border-radius: var(--raio) !important;
+  color: var(--texto) !important;
+  font-family: 'Barlow', sans-serif;
+}
+input:focus, select:focus, textarea:focus {
+  outline: 3px solid rgba(245,197,24,.45) !important;
+  border-color: #8a6700 !important;
+}
+label { color: var(--texto-2); font-weight: 600; }
+
+.tabela { background: var(--superficie); border: 2px solid var(--borda); border-radius: var(--raio); }
+.tabela th {
+  background: var(--superficie-2);
+  color: var(--texto-2);
+  font-family: 'IBM Plex Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-size: .72rem;
+  border-bottom: 2px solid var(--borda);
+}
+.tabela td { border-bottom: 1px solid #D9D0BE; color: var(--texto); }
+.tabela tr:hover td { background: #F4EEE0; }
+.tabela .num { font-family: 'IBM Plex Mono', monospace; }
+
+.barra { background: #E4DCC9; border-radius: 4px; }
+.barra > div, .barra .preenchimento { background: linear-gradient(90deg, #d9ad00, #F5C518); border-radius: 4px; }
+
+.historico .mov-produto { font-weight: 600; }
+.historico time, .historico .mov-data { color: var(--texto-2); font-family: 'IBM Plex Mono', monospace; font-size: .8rem; }
+
+.modal > div, .modal .modal-caixa {
+  background: var(--superficie);
+  border: 2px solid var(--borda);
+  border-radius: var(--raio);
+  box-shadow: 8px 8px 0 rgba(33,28,20,.25);
+}
+
+.rodape { color: var(--texto-2); border-top: 2px solid var(--borda); }
