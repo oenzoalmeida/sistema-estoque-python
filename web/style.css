@@ -349,3 +349,79 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 /* [hidden] precisa vencer o display:flex do próprio .loading, senão o
    indicador de carregamento continua visível após o app abrir. */
 .loading[hidden] { display: none; }
+
+/* ------------------------------------------------------------------
+   Polimento de interface e movimento (referência de design: diretrizes
+   de interface da Apple / HIG e palestras de "fluid interfaces" da WWDC,
+   traduzidas para a web). Só refinamento: identidade visual, layout e
+   funcionalidades não mudam.
+------------------------------------------------------------------- */
+
+/* Borda dos componentes interativos com contraste >= 3:1 sobre as
+   superfícies escuras (era --borda #2a2e37, ~1.3:1). Bordas estruturais
+   (cards, tabela, topbar) mantêm o tom original. */
+input, select, textarea,
+.btn {
+  border-color: #646e7c;
+}
+
+/* Foco de teclado mais visível (era anel de 2px) */
+input:focus-visible, select:focus-visible, textarea:focus-visible,
+.btn:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--azul);
+  outline-offset: 2px;
+}
+
+/* Alvos de toque de 44px e resposta imediata ao toque (só transform) */
+.btn {
+  min-height: 44px;
+  transition: background .12s, border-color .12s, transform 100ms ease-out;
+}
+
+.btn:active {
+  transform: scale(0.97);
+  transition-duration: 60ms;
+}
+
+.btn-mini { min-height: 36px; }
+
+/* Números tabulares em métricas, tabela e histórico (colunas estáveis) */
+.card-num,
+.tabela,
+.historico {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Link "pular para o conteúdo" (visível só com foco de teclado) */
+.pular-para-conteudo {
+  position: absolute;
+  left: 16px;
+  top: -56px;
+  z-index: 100;
+  background: var(--azul);
+  color: #0b1020;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: top 160ms ease;
+}
+
+.pular-para-conteudo:focus-visible {
+  top: 12px;
+  color: #0b1020;
+}
+
+/* Movimento reduzido: vira transição instantânea, sem perder a mudança de estado */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .btn:active { transform: none; }
+}
