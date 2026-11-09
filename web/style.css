@@ -651,3 +651,12 @@ label { color: var(--texto-2); font-weight: 600; }
 @media (prefers-reduced-motion: reduce) {
   .topbar::after, .letreiro-trilho, .btn-primary { animation: none; }
 }
+
+/* v2.1: mobile sem rolagem horizontal; números grandes só onde cabem. */
+html, body { overflow-x: clip; }
+.letreiro { max-width: 100vw; }
+.card { min-width: 0; }
+.card-num { overflow-wrap: break-word; }
+@media (max-width: 560px) {
+  .card-num { font-size: 1.45rem; }
+}
