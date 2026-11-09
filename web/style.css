@@ -586,3 +586,68 @@ label { color: var(--texto-2); font-weight: 600; }
 }
 
 .rodape { color: var(--texto-2); border-top: 2px solid var(--borda); }
+
+/* ==========================================================================
+   Depósito v2 (nov/2026): faixa de segurança animada sob a barra, letreiro
+   rolante, cartões com elevação ao toque e números maiores. Apenas CSS.
+   ========================================================================== */
+.topbar { border-bottom: none; }
+.topbar::after {
+  content: "";
+  display: block;
+  height: 7px;
+  background: repeating-linear-gradient(-45deg, #F5C518 0 12px, #211C14 12px 24px);
+  background-size: 34px 100%;
+  animation: deposito-faixa 2.4s linear infinite;
+}
+@keyframes deposito-faixa {
+  to { background-position: 34px 0; }
+}
+
+.letreiro {
+  overflow: hidden;
+  background: #211C14;
+  border-bottom: 2px solid #F5C518;
+  padding: 7px 0;
+}
+.letreiro-trilho {
+  display: flex;
+  width: max-content;
+  animation: deposito-letreiro 28s linear infinite;
+}
+.letreiro-trilho span {
+  white-space: nowrap;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #F5C518;
+  padding-right: 12px;
+}
+@keyframes deposito-letreiro {
+  to { transform: translateX(-50%); }
+}
+
+.card { transition: transform 120ms ease-out, box-shadow 120ms ease-out; }
+.card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0 rgba(33,28,20,.16);
+}
+.card-num { font-size: 1.9rem; line-height: 1.1; }
+.card.alerta { box-shadow: 4px 4px 0 rgba(184,134,11,.35); }
+.card.critico { box-shadow: 4px 4px 0 rgba(196,61,43,.35); }
+
+.btn-primary {
+  box-shadow: 3px 3px 0 rgba(33,28,20,.35), 0 0 0 0 rgba(245,197,24,.5);
+  animation: deposito-pulso 2.6s ease-out infinite;
+}
+@keyframes deposito-pulso {
+  0% { box-shadow: 3px 3px 0 rgba(33,28,20,.35), 0 0 0 0 rgba(245,197,24,.45); }
+  70% { box-shadow: 3px 3px 0 rgba(33,28,20,.35), 0 0 0 9px rgba(245,197,24,0); }
+  100% { box-shadow: 3px 3px 0 rgba(33,28,20,.35), 0 0 0 0 rgba(245,197,24,0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topbar::after, .letreiro-trilho, .btn-primary { animation: none; }
+}
