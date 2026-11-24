@@ -15,7 +15,7 @@ Este foi um dos meus primeiros projetos da faculdade de Ciência da Computação
 | | Original (Python/CLI) | Web |
 |---|---|---|
 | Interface | terminal | dashboard responsivo (desktop e mobile) |
-| Persistência | lista em memória (perde ao fechar) | Firestore (dados reais, em tempo real) |
+| Persistência | lista em memória (dados perdidos ao fechar) | Firestore (dados reais, em tempo real) |
 | Histórico | Não disponível | movimentações completas com data/hora e motivo |
 | Estoque mínimo | Não disponível | alerta de estoque baixo e zerado |
 | Edição/exclusão | Não disponível | com confirmação e histórico preservado |
@@ -55,7 +55,7 @@ A quantidade do produto só muda por movimentação: a edição de cadastro não
 
 Toda entrada/saída gera um registro permanente no histórico (imutável: as regras do Firestore proíbem edição e exclusão de movimentações).
 
-Excluir um produto mantém o histórico (o nome fica denormalizado no registro da movimentação).
+Excluir um produto mantém o histórico (o nome fica desnormalizado no registro da movimentação).
 
 ## Stack e arquitetura
 
